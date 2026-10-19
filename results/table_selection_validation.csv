@@ -1,0 +1,11 @@
+model,feature set,val F1 at 0.50,best threshold,val F1 at best threshold
+Baseline: majority class,all 7 features,0.0,,0.0
+Baseline: majority class,no time-trend features,0.0,,0.0
+Baseline: rule of thumb,all 7 features,0.3368421052631579,,0.3368421052631579
+Baseline: rule of thumb,no time-trend features,0.3368421052631579,,0.3368421052631579
+Decision Tree,all 7 features,0.3508771929824561,0.05,0.5301204819277109
+Decision Tree,no time-trend features,0.33766233766233766,0.05,0.5562913907284768
+Logistic Regression,all 7 features,0.3013698630136986,0.4,0.5423728813559322
+Logistic Regression,no time-trend features,0.43564356435643564,0.32,0.5341614906832298
+Random Forest,all 7 features,0.22580645161290322,0.32,0.543046357615894
+Random Forest,no time-trend features,0.38202247191011235,0.26,0.5333333333333333

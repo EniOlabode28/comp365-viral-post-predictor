@@ -1,0 +1,25 @@
+{
+  "time_test_selected_model": "Decision Tree",
+  "time_test_paired_bootstrap": {
+    "selected model": "Decision Tree",
+    "f1 difference": -0.08773406269724382,
+    "95% CI low": -0.18974437197559435,
+    "95% CI high": 0.02368195200856466,
+    "share of resamples where model > rule": 0.063
+  },
+  "time_test_f1": {
+    "Baseline: majority class": 0.0,
+    "Baseline: rule of thumb": 0.4898,
+    "Decision Tree": 0.4021,
+    "Logistic Regression": 0.4171,
+    "Random Forest": 0.4021
+  },
+  "random_cv_f1": {
+    "Baseline: majority class": 0.0,
+    "Baseline: rule of thumb": 0.3568,
+    "Decision Tree": 0.3213,
+    "Logistic Regression": 0.4084,
+    "Random Forest": 0.3818
+  },
+  "permutation_p": 0.004975124378109453
+}

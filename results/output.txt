@@ -1,0 +1,97 @@
+Python 3.13.7 | numpy 2.4.1 | pandas 3.0.0 | scikit-learn 1.9.0 | scipy 1.18.1 | matplotlib 3.11.1
+Posts after dropping rows with missing values: 499
+
+============================================================================
+PART 1: TIME-ORDERED EVALUATION (primary result)
+============================================================================
+Fit months 1-6:        222 posts | cutoff (75th pct of fit) = 212 | high in fit: 56 (25%)
+Validation months 7-9: 122 posts | high by that cutoff: 44 (36%)
+
+Validation (months 7-9) - every candidate:
+                   model            feature set  val F1 at 0.50  best threshold  val F1 at best threshold
+Baseline: majority class         all 7 features           0.000             NaN                     0.000
+Baseline: majority class no time-trend features           0.000             NaN                     0.000
+ Baseline: rule of thumb         all 7 features           0.337             NaN                     0.337
+ Baseline: rule of thumb no time-trend features           0.337             NaN                     0.337
+           Decision Tree         all 7 features           0.351            0.05                     0.530
+           Decision Tree no time-trend features           0.338            0.05                     0.556
+     Logistic Regression         all 7 features           0.301            0.40                     0.542
+     Logistic Regression no time-trend features           0.436            0.32                     0.534
+           Random Forest         all 7 features           0.226            0.32                     0.543
+           Random Forest no time-trend features           0.382            0.26                     0.533
+
+Chosen settings per model (by validation F1):
+  Baseline: majority class   features: all 7 features           threshold: n/a   val F1: 0.000
+  Baseline: rule of thumb    features: all 7 features           threshold: n/a   val F1: 0.337
+  Decision Tree              features: no time-trend features   threshold: 0.05  val F1: 0.556
+  Logistic Regression        features: all 7 features           threshold: 0.40  val F1: 0.542
+  Random Forest              features: all 7 features           threshold: 0.32  val F1: 0.543
+
+Model selected for the paper's main claim (highest validation F1): Decision Tree
+
+Refit on months 1-9:   344 posts | cutoff (75th pct of months 1-9) = 228
+Test months 10-12:     155 posts | high by that cutoff: 39 (25%)
+
+TEST RESULTS (months 10-12, scored once):
+                          predicted high  accuracy  precision  recall     f1  f1 95% CI low  f1 95% CI high
+model                                                                                                      
+Baseline: majority class               0     0.748      0.000   0.000  0.000          0.000           0.000
+Baseline: rule of thumb               59     0.677      0.407   0.615  0.490          0.356           0.602
+Decision Tree                        155     0.252      0.252   1.000  0.402          0.315           0.488
+Logistic Regression                  148     0.297      0.264   1.000  0.417          0.326           0.503
+Random Forest                        155     0.252      0.252   1.000  0.402          0.315           0.488
+
+POST HOC sensitivity (not used for selection): same models at the default 0.50 threshold
+                     threshold  predicted high  accuracy  precision  recall     f1
+model                                                                             
+Decision Tree              0.5              53     0.626      0.321   0.436  0.370
+Logistic Regression        0.5             139     0.329      0.266   0.949  0.416
+Random Forest              0.5             149     0.252      0.242   0.923  0.383
+
+Paired bootstrap (2000 resamples of the test posts), Decision Tree minus rule of thumb:
+  F1 difference -0.088, 95% CI [-0.190, +0.024], model ahead in 6% of resamples
+
+WEAK CASES: Decision Tree on months 10-12, by content type
+        test posts  high posts  high found  false alarms  recall  accuracy
+Type                                                                      
+Link          10.0         0.0         0.0          10.0     NaN     0.000
+Photo        118.0        27.0        27.0          91.0     1.0     0.229
+Status        23.0        11.0        11.0          12.0     1.0     0.478
+Video          4.0         1.0         1.0           3.0     1.0     0.250
+
+Missed high-engagement test posts: 0 of 39. Five biggest:
+Empty DataFrame
+Columns: [Page total likes, Type, Category, Post Month, Post Weekday, Post Hour, Paid, Total Interactions]
+Index: []
+
+============================================================================
+PART 2: RANDOM-SPLIT CROSS-VALIDATION (Checkpoint 2 rerun, secondary)
+============================================================================
+All 499 posts | cutoff (75th pct of all posts, as in Checkpoint 2) = 229 | high: 125
+Note: here the cutoff uses all posts, so this part is for comparison with Checkpoint 2 only.
+
+Repeated stratified 5-fold CV (5 repeats = 25 folds):
+                          accuracy  precision  recall  f1_mean  f1_std
+model                                                                 
+Baseline: majority class     0.749      0.000   0.000    0.000   0.000
+Baseline: rule of thumb      0.611      0.306   0.432    0.357   0.069
+Decision Tree                0.552      0.266   0.432    0.321   0.076
+Logistic Regression          0.580      0.318   0.578    0.408   0.051
+Random Forest                0.622      0.328   0.466    0.382   0.064
+
+Corrected resampled t-test vs rule of thumb (Nadeau & Bengio 2003; folds share posts):
+  Decision Tree        mean F1 gain -0.035   t = -0.65   p = 0.519
+  Logistic Regression  mean F1 gain +0.052   t = 1.27   p = 0.215
+  Random Forest        mean F1 gain +0.025   t = 0.46   p = 0.651
+
+Label-permutation test, Logistic Regression (200 shuffles, same 25 folds):
+  real-label F1 0.408 | shuffled F1 mean 0.321 (sd 0.029, max 0.385) | p = 0.005
+
+Ablation (Logistic Regression, same 25 folds):
+                                       f1_mean  f1_std
+features                                              
+all features                             0.408   0.051
+without Page total likes                 0.417   0.054
+without Page total likes + Post Month    0.414   0.054
+
+Tables and output written to results/, figures to figures/

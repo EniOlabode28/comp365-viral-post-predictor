@@ -1,0 +1,5 @@
+Type,test posts,high posts,high found,false alarms,recall,accuracy
+Link,10.0,0.0,0.0,10.0,,0.0
+Photo,118.0,27.0,27.0,91.0,1.0,0.2288135593220339
+Status,23.0,11.0,11.0,12.0,1.0,0.4782608695652174
+Video,4.0,1.0,1.0,3.0,1.0,0.25
